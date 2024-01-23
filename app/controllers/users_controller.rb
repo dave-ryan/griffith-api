@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authenticate_admin, except: [:show]
+  before_action :authenticate_admin, except: [:show, :index]
   before_action :authenticate_user, only: [:show]
 
   def index
