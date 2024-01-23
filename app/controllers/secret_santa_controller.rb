@@ -18,7 +18,7 @@ class SecretSantaController < ApplicationController
                :customgifts => { include: :customgift_purchaser },
              ]
     else
-      render json: { errors: "No Secret Santa!" }, status: 400
+      render json: { message: "No Secret Santa!" }
     end
   end
 end
