@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :authenticate_admin, except: [:show, :index]
-  before_action :authenticate_user, only: [:show]
+  before_action :authenticate_user, only: [:show, :index]
 
   def index
     users = User.all.includes(:gifts,
