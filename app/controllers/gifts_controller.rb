@@ -8,16 +8,12 @@ class GiftsController < ApplicationController
 
   def create
     gift = Gift.new(
-      user_id: @current_user,
+      user_id: @current_user.id,
       purchaser_id: nil,
       name: params[:name],
       link: params[:link],
     )
-    if gift.save
-      render json: gift
-    else
-      render json: { errors: errors.full_messages }
-    end
+    save_gift(gift)
   end
 
   def update
@@ -87,7 +83,7 @@ class GiftsController < ApplicationController
     if gift.save
       render json: gift
     else
-      render json: { errors: gift.errors.full_messages }
+      render json: { errors: gift.errors.full_messages }, status: 400
     end
   end
 end
