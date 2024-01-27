@@ -43,7 +43,6 @@ RSpec.describe "Gifts", type: :request do
       FactoryBot.create_list(:gift, 10)
       request_with_login("get", "/gifts", user)
       data = JSON.parse(response.body)
-      puts data
       expect(data.length).to eq 10
     end
   end

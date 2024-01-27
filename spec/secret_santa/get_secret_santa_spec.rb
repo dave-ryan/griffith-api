@@ -18,11 +18,20 @@ RSpec.describe "Secret Santa", type: :request do
   end
 
   describe "GET /secret-santa with no secret santa" do
-    it "returns 400" do
+    it "returns 200" do
       FactoryBot.create(:family)
-      user = FactoryBot.create(:user)
+      user = FactoryBot.create(:user_without_secret_santa)
       request_with_login("get", "/secret-santa", user)
-      expect(response).to have_http_status(400)
+      data = JSON.parse(response.body)
+      expect(response).to have_http_status(200)
+    end
+
+    it "returns a message of no secret santa" do
+      FactoryBot.create(:family)
+      user = FactoryBot.create(:user_without_secret_santa)
+      request_with_login("get", "/secret-santa", user)
+      data = JSON.parse(response.body)
+      expect(data["message"]).to eq "No Secret Santa!"
     end
   end
 
