@@ -45,9 +45,13 @@ class GiftsController < ApplicationController
   private
 
   def update_gift(gift, params)
-    gift[:name] = params[:name] || gift[:name]
-    gift[:link] = params[:link] || gift[:link]
-    save_gift(gift)
+    if gift.user_id != @current_user.id
+      render json: {}, status: 401
+    else
+      gift[:name] = params[:name] || gift[:name]
+      gift[:link] = params[:link] || gift[:link]
+      save_gift(gift)
+    end
   end
 
   def unpurchase_gift(gift)
