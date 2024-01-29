@@ -5,7 +5,7 @@ Rails.application.routes.draw do
     put "/admin/gifts-cleanup" => "admin#gifts_cleanup"
     get "/admin/families" => "admin#families_index"
     get "/secret-santa" => "secret_santa#index"
-    get "/me" => "users#show"
+    get "/current-user" => "users#show"
     post "/sessions" => "sessions#create"
     resources :customgifts, only: [:create, :update, :destroy]
     resources :gifts, only: [:index, :create, :update, :destroy]

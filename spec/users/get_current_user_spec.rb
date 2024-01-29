@@ -1,34 +1,34 @@
 require "rails_helper"
 
 RSpec.describe "Users", type: :request do
-  describe "GET /me with no users" do
+  describe "GET /current-user with no users" do
     it "returns 401" do
-      get "/me"
+      get "/current-user"
       expect(response).to have_http_status(401)
     end
   end
 
-  describe "GET /me without logging in" do
+  describe "GET /current-user without logging in" do
     it "returns 401" do
       FactoryBot.create(:family)
       user = FactoryBot.create(:user)
-      get "/me"
+      get "/current-user"
       expect(response).to have_http_status(401)
     end
   end
 
-  describe "GET /me with good data" do
+  describe "GET /current-user with good data" do
     it "returns status code 200" do
       FactoryBot.create(:family)
       user = FactoryBot.create(:user)
-      request_with_login("get", "/me", user)
+      request_with_login("get", "/current-user", user)
       expect(response).to have_http_status(200)
     end
 
     it "returns my data" do
       FactoryBot.create(:family)
       user = FactoryBot.create(:user)
-      request_with_login("get", "/me", user)
+      request_with_login("get", "/current-user", user)
       data = JSON.parse(response.body)
       expect(data.length).to eq 6
       expect(data["family_id"]).to eq 1
