@@ -32,10 +32,10 @@ class GiftsController < ApplicationController
 
   def destroy
     gift = Gift.find_by(id: params[:id])
-    if gift.user != @current_user
-      render json: {}, status: :unauthorized
-    elsif !gift
-      render json: { errors: "Oops! This gift has been erased. Refreshing..." }, status: 400
+    if !gift
+      render json: {}, status: 400
+    elsif gift.user != @current_user
+      render json: {}, status: 401
     else
       gift.delete
       render json: { message: "Wished gift destroyed!" }
