@@ -34,6 +34,8 @@ class CustomgiftsController < ApplicationController
     customgift = Customgift.find_by(id: params[:id])
     if !customgift
       render json: { errors: "Oops! This customgift has been erased." }, status: 404
+    elsif customgift.customgift_purchaser_id != @current_user.id
+      render json: {}, status: 401
     elsif customgift.delete
       render json: { message: "Custom customgift destroyed!" }
     else
