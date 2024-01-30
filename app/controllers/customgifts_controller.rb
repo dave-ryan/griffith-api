@@ -18,15 +18,15 @@ class CustomgiftsController < ApplicationController
     customgift = Customgift.includes(:customgift_purchaser).find_by(id: params[:id])
     if !customgift
       render json: { errors: "Oops! This customgift has been erased." }, status: 404
-    elsif customgift_purchaser_id != @current_user.id
+    elsif customgift.customgift_purchaser_id != @current_user.id
       render json: {}, status: 401
-    end
-
-    customgift.note = params[:note]
-    if customgift.save
-      render json: customgift
     else
-      render json: { errors: customgift.errors.full_messages }, status: 400
+      customgift.note = params[:note]
+      if customgift.save
+        render json: customgift
+      else
+        render json: { errors: customgift.errors.full_messages }, status: 400
+      end
     end
   end
 
@@ -34,8 +34,7 @@ class CustomgiftsController < ApplicationController
     customgift = Customgift.find_by(id: params[:id])
     if !customgift
       render json: { errors: "Oops! This customgift has been erased." }, status: 404
-    end
-    if customgift.delete
+    elsif customgift.delete
       render json: { message: "Custom customgift destroyed!" }
     else
       render json: { errors: customgift.errors.full_messages }, status: 400

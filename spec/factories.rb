@@ -30,7 +30,8 @@ FactoryBot.define do
   end
 
   factory :customgift do
+    customgift_purchaser_id { 1 }
     user_id { 1 }
-    name { FFaker::Product.product }
+    note { FFaker::Product.product }
   end
 end
