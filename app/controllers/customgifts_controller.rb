@@ -2,33 +2,43 @@ class CustomgiftsController < ApplicationController
   before_action :authenticate_user
 
   def create
-    gift = Customgift.new(
+    customgift = Customgift.new(
       user_id: params[:user_id],
-      customgift_purchaser_id: params[:customgift_purchaser_id],
+      customgift_purchaser_id: @current_user.id,
       note: params[:note],
     )
-    if gift.save
-      render json: gift
+    if customgift.save
+      render json: customgift
     else
-      render json: { errors: gift.errors.full_messages }
+      render json: { errors: customgift.errors.full_messages }, status: 400
     end
   end
 
   def update
-    gift = Customgift.includes(:customgift_purchaser).find_by(id: params[:id])
-    if gift
-      gift.note = params[:note]
+    customgift = Customgift.includes(:customgift_purchaser).find_by(id: params[:id])
+    if !customgift
+      render json: { errors: "Oops! This customgift has been erased." }, status: 404
+    elsif customgift_purchaser_id != @current_user.id
+      render json: {}, status: 401
     end
-    if gift.save
-      render json: gift
+
+    customgift.note = params[:note]
+    if customgift.save
+      render json: customgift
     else
-      render json: { errors: gift.errors.full_messages }
+      render json: { errors: customgift.errors.full_messages }, status: 400
     end
   end
 
   def destroy
-    gift = Customgift.find_by(id: params[:id])
-    gift.delete
-    render json: { message: "Custom gift destroyed!" }
+    customgift = Customgift.find_by(id: params[:id])
+    if !customgift
+      render json: { errors: "Oops! This customgift has been erased." }, status: 404
+    end
+    if customgift.delete
+      render json: { message: "Custom customgift destroyed!" }
+    else
+      render json: { errors: customgift.errors.full_messages }, status: 400
+    end
   end
 end

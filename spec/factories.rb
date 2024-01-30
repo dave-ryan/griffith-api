@@ -28,4 +28,9 @@ FactoryBot.define do
     user_id { 1 }
     name { FFaker::Product.product }
   end
+
+  factory :customgift do
+    user_id { 1 }
+    name { FFaker::Product.product }
+  end
 end
