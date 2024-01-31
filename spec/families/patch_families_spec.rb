@@ -48,6 +48,17 @@ RSpec.describe "Families", type: :request do
     end
   end
 
+  describe "PATCH /families/1 with admin, with bad params" do
+    it "returns 400" do
+      family = FactoryBot.create(:family)
+      admin = FactoryBot.create(:admin)
+      params = { name: "" }
+      request_with_login("patch", "/families/1", admin, params)
+      expect(response).to have_http_status(400)
+      expect(JSON.parse(response.body)["errors"]).to eq ["Name can't be blank"]
+    end
+  end
+
   describe "PATCH /families/1 with admin, with params, missing family" do
     it "returns 404" do
       FactoryBot.create(:family)

@@ -22,9 +22,9 @@ class FamiliesController < ApplicationController
   def create
     family = Family.new(name: params[:name])
     if family.save
-      render json: { message: "Family successfully created!, #{family.name}" }
+      render json: family
     else
-      render json: { message: "Family failed to create!" }
+      render json: { errors: family.errors.full_messages }, status: 400
     end
   end
 
@@ -37,7 +37,7 @@ class FamiliesController < ApplicationController
       if family.save
         render json: family
       else
-        render json: { errors: family.errors.full_messages }
+        render json: { errors: family.errors.full_messages }, status: 400
       end
     end
   end

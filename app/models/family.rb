@@ -5,4 +5,6 @@ class Family < ApplicationRecord
   has_many :purchasers, through: :gifts
   has_many :customgifts, through: :users
   has_many :customgift_purchasers, through: :customgifts
+
+  validates :name, presence: true
 end
