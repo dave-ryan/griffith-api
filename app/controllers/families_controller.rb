@@ -36,7 +36,11 @@ class FamiliesController < ApplicationController
 
   def destroy
     family = Family.find_by(id: params[:id])
-    family.delete
-    render json: { message: "Gift destroyed!" }
+    if !family
+      render json: { errors: ["No family found"] }, status: 404
+    else
+      family.delete
+      render json: { message: "Family destroyed!" }
+    end
   end
 end
