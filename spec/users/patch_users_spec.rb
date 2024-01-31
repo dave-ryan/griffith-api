@@ -30,7 +30,7 @@ RSpec.describe "Users", type: :request do
   describe "PATCH /users/1 with admin, without params" do
     it "returns 200" do
       FactoryBot.create(:family)
-      admin = FactoryBot.create(:admin_user)
+      admin = FactoryBot.create(:admin)
       request_with_login("patch", "/users/1", admin)
       expect(response).to have_http_status(200)
     end
@@ -39,7 +39,7 @@ RSpec.describe "Users", type: :request do
   describe "PATCH /users/1 with admin, with required params" do
     it "returns 200" do
       FactoryBot.create(:family)
-      admin = FactoryBot.create(:admin_user)
+      admin = FactoryBot.create(:admin)
       params = { id: 1, name: FFaker::Name.first_name, family_id: 1, santa_group: 1, secret_santa: 1, is_admin: false, password: "123" }
       request_with_login("patch", "/users/1", admin, params)
       expect(response).to have_http_status(200)

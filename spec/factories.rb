@@ -14,7 +14,7 @@ FactoryBot.define do
     password { "123" }
   end
 
-  factory :admin_user, :parent => :user do
+  factory :admin, :parent => :user do
     name { "admin" }
     is_admin { true }
     password { "123" }

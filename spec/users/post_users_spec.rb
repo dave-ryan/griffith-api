@@ -30,7 +30,7 @@ RSpec.describe "Users", type: :request do
   describe "POST /users with admin, without params" do
     it "returns 400" do
       FactoryBot.create(:family)
-      admin = FactoryBot.create(:admin_user)
+      admin = FactoryBot.create(:admin)
       request_with_login("post", "/users", admin)
       expect(response).to have_http_status(400)
     end
@@ -39,7 +39,7 @@ RSpec.describe "Users", type: :request do
   describe "POST /users with admin, without all required params" do
     it "returns 400" do
       FactoryBot.create(:family)
-      admin = FactoryBot.create(:admin_user)
+      admin = FactoryBot.create(:admin)
       params = { family_id: 1, santa_group: 1, secret_santa: 1, is_admin: false, password: "123" }
       request_with_login("post", "/users", admin, params)
       expect(response).to have_http_status(400)
@@ -49,7 +49,7 @@ RSpec.describe "Users", type: :request do
   describe "POST /users with admin, with minimum required params" do
     it "returns 200" do
       FactoryBot.create(:family)
-      admin = FactoryBot.create(:admin_user)
+      admin = FactoryBot.create(:admin)
       params = { name: FFaker::Name.first_name, family_id: 1, password: "123" }
       request_with_login("post", "/users", admin, params)
       expect(response).to have_http_status(200)
@@ -59,7 +59,7 @@ RSpec.describe "Users", type: :request do
   describe "POST /users with admin, with required params" do
     it "returns 200" do
       FactoryBot.create(:family)
-      admin = FactoryBot.create(:admin_user)
+      admin = FactoryBot.create(:admin)
       params = { name: FFaker::Name.first_name, family_id: 1, santa_group: 1, secret_santa: 1, is_admin: false, password: "123" }
       request_with_login("post", "/users", admin, params)
       expect(response).to have_http_status(200)

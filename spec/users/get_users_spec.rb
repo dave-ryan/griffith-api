@@ -19,7 +19,7 @@ RSpec.describe "Users", type: :request do
     it "returns full list of users" do
       FactoryBot.create(:family)
       FactoryBot.create_list(:user, 9)
-      admin = FactoryBot.create(:admin_user)
+      admin = FactoryBot.create(:admin)
       request_with_login("get", "/users", admin)
       expect(JSON.parse(response.body).length).to eq 10
     end
@@ -28,7 +28,7 @@ RSpec.describe "Users", type: :request do
   describe "GET /users with admin" do
     it "returns status code 200" do
       FactoryBot.create(:family)
-      admin = FactoryBot.create(:admin_user)
+      admin = FactoryBot.create(:admin)
       request_with_login("get", "/users", admin)
       expect(response).to have_http_status(200)
     end
@@ -36,7 +36,7 @@ RSpec.describe "Users", type: :request do
     it "returns full list of users" do
       FactoryBot.create(:family)
       FactoryBot.create_list(:user, 9)
-      admin = FactoryBot.create(:admin_user)
+      admin = FactoryBot.create(:admin)
       request_with_login("get", "/users", admin)
       expect(JSON.parse(response.body).length).to eq 10
     end
