@@ -4,7 +4,7 @@ class FamiliesController < ApplicationController
 
   def index
     if !@current_user.family
-      render json: { errors: ["No family found"] }, status: 404
+      render_404
     else
       my_family = Family.includes(:users,
                                   :gifts,
@@ -30,21 +30,31 @@ class FamiliesController < ApplicationController
 
   def update
     family = Family.find_by(id: params[:id])
-    family[:name] = params[:name] || family[:name]
-    if family.save
-      render json: family
+    if !family
+      render_404
     else
-      render json: { errors: family.errors.full_messages }
+      family[:name] = params[:name] || family[:name]
+      if family.save
+        render json: family
+      else
+        render json: { errors: family.errors.full_messages }
+      end
     end
   end
 
   def destroy
     family = Family.find_by(id: params[:id])
     if !family
-      render json: { errors: ["No family found"] }, status: 404
+      render_404
     else
       family.delete
       render json: { message: "Family destroyed!" }
     end
   end
+end
+
+private
+
+def render_404
+  render json: { errors: ["No family found"] }, status: 404
 end
