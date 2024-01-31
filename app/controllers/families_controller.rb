@@ -3,16 +3,20 @@ class FamiliesController < ApplicationController
   before_action :authenticate_admin, except: [:index]
 
   def index
-    my_family = Family.includes(:users,
-                                :gifts,
-                                :purchasers,
-                                :secret_santas,
-                                :customgifts,
-                                :customgift_purchasers).find_by(id: @current_user.family.id)
-    render json: my_family,
-           include: [:users => { include: :secret_santa,
-                                 :customgifts => { include: :purchaser },
-                                 :gifts => { include: :purchaser } }]
+    if !@current_user.family
+      render json: { errors: ["No family found"] }, status: 404
+    else
+      my_family = Family.includes(:users,
+                                  :gifts,
+                                  :purchasers,
+                                  :secret_santas,
+                                  :customgifts,
+                                  :customgift_purchasers).find_by(id: @current_user.family.id)
+      render json: my_family,
+             include: [:users => { include: :secret_santa,
+                                   :customgifts => { include: :purchaser },
+                                   :gifts => { include: :purchaser } }]
+    end
   end
 
   def create

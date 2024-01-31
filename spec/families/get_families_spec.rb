@@ -16,6 +16,19 @@ RSpec.describe "Families", type: :request do
     end
   end
 
+  describe "GET /families with missing data" do
+    it "returns 200" do
+      FactoryBot.create(:family)
+      admin = FactoryBot.create(:admin_user)
+      request_with_login("delete", "/families/1", admin)
+      expect(response).to have_http_status(200)
+      expect(JSON.parse(response.body)["message"]).to eq "Family destroyed!"
+      request_with_login("get", "/families", admin)
+      expect(response).to have_http_status(404)
+      expect(JSON.parse(response.body)["errors"]).to eq ["No family found"]
+    end
+  end
+
   describe "GET /families with good data" do
     it "returns 200" do
       FactoryBot.create(:family)
