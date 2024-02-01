@@ -9,11 +9,11 @@ RSpec.describe "Gifts", type: :request do
   end
 
   describe "DELETE /gifts/1 without any gifts" do
-    it "returns 400" do
+    it "returns 404" do
       FactoryBot.create(:family)
       user = FactoryBot.create(:user)
       request_with_login("delete", "/gifts/1", user)
-      expect(response).to have_http_status(400)
+      expect(response).to have_http_status(404)
     end
   end
 

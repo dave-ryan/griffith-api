@@ -9,12 +9,12 @@ RSpec.describe "Gifts", type: :request do
   end
 
   describe "PATCH /gifts/1 no gifts" do
-    it "returns 400" do
+    it "returns 404" do
       FactoryBot.create(:family)
       user = FactoryBot.create(:user)
 
       request_with_login("patch", "/gifts/1", user)
-      expect(response).to have_http_status(400)
+      expect(response).to have_http_status(404)
     end
   end
 

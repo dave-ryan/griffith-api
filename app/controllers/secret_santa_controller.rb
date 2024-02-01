@@ -17,8 +17,10 @@ class SecretSantaController < ApplicationController
                :gifts => { include: :purchaser },
                :customgifts => { include: :customgift_purchaser },
              ]
+    elsif !@current_user.santa_group
+      render json: {}
     else
-      render json: { message: "No Secret Santa!" }
+      render json: { message: "Missing Secret Santa!" }, status: 404
     end
   end
 end

@@ -9,15 +9,12 @@ FactoryBot.define do
   end
 
   factory :user_without_secret_santa, :parent => :user do
-    name { FFaker::Name.first_name }
-    family_id { 1 }
-    password { "123" }
+    santa_group { nil }
   end
 
   factory :admin, :parent => :user do
     name { "admin" }
     is_admin { true }
-    password { "123" }
   end
 
   factory :family do

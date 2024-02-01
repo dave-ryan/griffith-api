@@ -20,7 +20,7 @@ class GiftsController < ApplicationController
     gift = Gift.includes(:purchaser).find_by(id: params[:id])
 
     if !gift
-      render json: { errors: "Oops! This gift has been erased." }, status: 400
+      render json: { errors: "Oops! This gift has been erased." }, status: 404
     elsif params[:purchasing] == "purchasing"
       purchase_gift(gift)
     elsif params[:purchasing] == "unpurchasing"
@@ -33,7 +33,7 @@ class GiftsController < ApplicationController
   def destroy
     gift = Gift.find_by(id: params[:id])
     if !gift
-      render json: {}, status: 400
+      render json: {}, status: 404
     elsif gift.user != @current_user
       render json: {}, status: 401
     else
