@@ -8,7 +8,7 @@ RSpec.describe "Families", type: :request do
     end
   end
 
-  describe "GET /families/1 without logging in" do
+  describe "GET /families without logging in" do
     it "returns 401" do
       FactoryBot.create(:family)
       get "/families"

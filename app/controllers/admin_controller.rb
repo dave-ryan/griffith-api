@@ -45,7 +45,7 @@ class AdminController < ApplicationController
       shuffler(group2)
       render json: { message: "Secret santas have been assigned!" }
     else
-      render json: { errors: "Admins only! :)" }, status: :unauthorized
+      render json: {}, status: 401
     end
   end
 
