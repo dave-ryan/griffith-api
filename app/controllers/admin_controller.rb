@@ -7,7 +7,7 @@ class AdminController < ApplicationController
       ::Data_Wipe_Seed.reboot
       render json: { message: ["All users and their data have been destroyed and rebuilt"] }
     else
-      render json: {}, status: :unauthorized
+      render json: {}, status: 401
     end
   end
 
@@ -64,7 +64,6 @@ class AdminController < ApplicationController
       end
       timer -= 1
       if timer == 0 && assigned_santa.length != group.length
-        p "failure! Trying again.."
         timer = 500
         assigned_santa = {}
       elsif assigned_santa.length == group.length
