@@ -8,10 +8,6 @@ FactoryBot.define do
     password { "123" }
   end
 
-  factory :user_without_secret_santa, :parent => :user do
-    santa_group { nil }
-  end
-
   factory :admin, :parent => :user do
     name { "admin" }
     is_admin { true }

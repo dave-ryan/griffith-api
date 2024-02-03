@@ -29,19 +29,12 @@ RSpec.describe "Gifts", type: :request do
   end
 
   describe "GET /gifts with good data" do
-    it "returns 200" do
+    it "returns my gifts" do
       FactoryBot.create(:family)
       user = FactoryBot.create(:user)
       FactoryBot.create_list(:gift, 10)
       request_with_login("get", "/gifts", user)
       expect(response).to have_http_status(200)
-    end
-
-    it "returns my data" do
-      FactoryBot.create(:family)
-      user = FactoryBot.create(:user)
-      FactoryBot.create_list(:gift, 10)
-      request_with_login("get", "/gifts", user)
       data = JSON.parse(response.body)
       expect(data.length).to eq 10
     end

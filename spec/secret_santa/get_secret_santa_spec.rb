@@ -20,7 +20,7 @@ RSpec.describe "Secret Santa", type: :request do
   describe "GET /secret-santa with no santa group" do
     it "returns 200, empty data" do
       FactoryBot.create(:family)
-      user = FactoryBot.create(:user_without_secret_santa)
+      user = FactoryBot.create(:user, santa_group: nil)
       request_with_login("get", "/secret-santa", user)
       expect(response).to have_http_status(200)
       data = JSON.parse(response.body)

@@ -18,17 +18,11 @@ RSpec.describe "Users", type: :request do
   end
 
   describe "GET /current-user with good data" do
-    it "returns status code 200" do
+    it "returns my user record" do
       FactoryBot.create(:family)
       user = FactoryBot.create(:user)
       request_with_login("get", "/current-user", user)
       expect(response).to have_http_status(200)
-    end
-
-    it "returns my data" do
-      FactoryBot.create(:family)
-      user = FactoryBot.create(:user)
-      request_with_login("get", "/current-user", user)
       data = JSON.parse(response.body)
       expect(data.length).to eq 6
       expect(data["family_id"]).to eq 1

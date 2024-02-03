@@ -3,11 +3,9 @@ class AdminController < ApplicationController
   before_action :authenticate_admin, except: [:reboot]
 
   def reboot
-    if (@current_user && @current_user.is_admin) || User.all.length == 0
+    if current_user && current_user.is_admin || User.all.length == 0
       ::Data_Wipe_Seed.reboot
-      render json: { message: "All users and their data have been destroyed and rebuilt" }
-    elsif !params[:is_admin] && User.all.length != 0
-      render json: { errors: "There are already users in the database and you are not an admin." }, status: 406
+      render json: { message: ["All users and their data have been destroyed and rebuilt"] }
     else
       render json: {}, status: :unauthorized
     end
@@ -34,9 +32,9 @@ class AdminController < ApplicationController
                                    :customgifts,
                                    :customgift_purchasers)
     render json: families,
-      include: [:users => { :include => :secret_santa,
-                            :customgifts => { :include => :purchaser },
-                            :gifts => { :include => :purchaser } }]
+           include: [:users => { :include => :secret_santa,
+                                 :customgifts => { :include => :purchaser },
+                                 :gifts => { :include => :purchaser } }]
   end
 
   def secret_santa_shuffle
