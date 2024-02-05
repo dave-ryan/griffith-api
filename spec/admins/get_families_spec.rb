@@ -47,10 +47,10 @@ RSpec.describe "Admins", type: :request do
       expect(response).to have_http_status(200)
       data = JSON.parse(response.body)
       expect(data.length).to eq 2
-      expect(JSON.parse(response.body)[0]["name"]).to eq family.name
-      expect(JSON.parse(response.body)[0]["id"]).to eq family.id
-      expect(JSON.parse(response.body)[1]["name"]).to eq family2.name
-      expect(JSON.parse(response.body)[1]["id"]).to eq family2.id
+      expect(data[0]["name"]).to eq family.name
+      expect(data[0]["id"]).to eq family.id
+      expect(data[1]["name"]).to eq family2.name
+      expect(data[1]["id"]).to eq family2.id
     end
   end
 end

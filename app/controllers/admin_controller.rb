@@ -14,14 +14,14 @@ class AdminController < ApplicationController
   def gifts_cleanup
     last_christmas = Date.new(Date.today.year - 1, 12, 25)
     gifts = Gift.joins(:purchaser)
-    cleanedup = []
+    cleaned_up = []
     gifts.each do |gift|
       if gift.created_at < last_christmas && gift.updated_at < last_christmas
-        cleanedup.push(gift)
+        cleaned_up.push(gift)
         gift.delete
       end
     end
-    render json: { message: "Cleanup Successful", cleanedup: cleanedup }
+    render json: { message: "Clean up Successful", cleaned_up: cleaned_up }
   end
 
   def families_index
