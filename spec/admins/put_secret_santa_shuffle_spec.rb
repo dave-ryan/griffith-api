@@ -25,7 +25,36 @@ RSpec.describe "Admins", type: :request do
     end
   end
 
-  describe "PUT /admin/secret-santa-shuffle with admin" do
+  describe "PUT /admin/secret-santa-shuffle with admin but too many men in one family" do
+    it "returns 406, can't be shuffled" do
+      FactoryBot.create_list(:family, 3)
+      FactoryBot.create_list(:user, 6, family_id: 1, santa_group: 1)
+      FactoryBot.create_list(:user, 1, family_id: 1, santa_group: 2)
+      FactoryBot.create_list(:user, 2, family_id: 2, santa_group: 1)
+      FactoryBot.create_list(:user, 4, family_id: 2, santa_group: 2)
+      FactoryBot.create_list(:user, 3, family_id: 3, santa_group: 1)
+      FactoryBot.create_list(:user, 4, family_id: 3, santa_group: 2)
+      admin = FactoryBot.create(:admin)
+      request_with_login("put", "/admin/secret-santa-shuffle", admin)
+      expect(response).to have_http_status(406)
+    end
+  end
+
+  describe "PUT /admin/secret-santa-shuffle with admin but too many women in one family" do
+    it "returns 406, can't be shuffled" do
+      FactoryBot.create_list(:family, 3)
+      FactoryBot.create_list(:user, 10, family_id: 1, santa_group: 2)
+      FactoryBot.create_list(:user, 2, family_id: 2, santa_group: 1)
+      FactoryBot.create_list(:user, 4, family_id: 2, santa_group: 2)
+      FactoryBot.create_list(:user, 3, family_id: 3, santa_group: 1)
+      FactoryBot.create_list(:user, 4, family_id: 3, santa_group: 2)
+      admin = FactoryBot.create(:admin)
+      request_with_login("put", "/admin/secret-santa-shuffle", admin)
+      expect(response).to have_http_status(406)
+    end
+  end
+
+  describe "PUT /admin/secret-santa-shuffle with admin and seeded data" do
     it "shuffles all users' secret santa" do
       FactoryBot.create(:family)
       admin = FactoryBot.create(:admin)
@@ -41,9 +70,17 @@ RSpec.describe "Admins", type: :request do
       expect(response).to have_http_status(200)
       data = JSON.parse(response.body)
       expect(data.length).to eq 25
+
+      secret1 = []
+      secret2 = []
       data.each do |user|
-        expect(user["secret_santa_id"]).to_not eq 1
+        if user["santa_group"]
+          secret1 << user["id"]
+          secret2 << user["secret_santa_id"]
+        end
       end
+      expect(secret1).to eq secret1.uniq
+      expect(secret2).to eq secret2.uniq
       expect(data[-1]["secret_santa_id"]).to_not eq 99
     end
   end

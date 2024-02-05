@@ -39,11 +39,15 @@ class AdminController < ApplicationController
 
   def secret_santa_shuffle
     if @current_user.is_admin
-      group1 = User.where(santa_group: 1)
-      group2 = User.where(santa_group: 2)
-      shuffler(group1)
-      shuffler(group2)
-      render json: { message: "Secret santas have been assigned!" }
+      men = User.where(santa_group: 1)
+      women = User.where(santa_group: 2)
+      if is_imbalanced(men) || is_imbalanced(women)
+        render json: { errors: ["Secret Santa Shuffling is not possible because one family has too many members"] }, status: 406
+      else
+        shuffler(men)
+        shuffler(women)
+        render json: { message: "Secret santas have been assigned!" }
+      end
     else
       render json: {}, status: 401
     end
@@ -70,5 +74,14 @@ class AdminController < ApplicationController
         timer = 0
       end
     end
+  end
+
+  def is_imbalanced(group)
+    family_sizes = group.group_by(&:family_id).transform_values(&:count)
+    largest_family_size = family_sizes.values.max
+    largest_family_id = family_sizes.key(family_sizes.values.max)
+    users_not_in_largest_family = group.reject { |user| user.family_id == largest_family_id }
+
+    return largest_family_size > users_not_in_largest_family.size
   end
 end
