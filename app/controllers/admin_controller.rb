@@ -5,7 +5,7 @@ class AdminController < ApplicationController
   def reboot
     if current_user && current_user.is_admin || User.all.length == 0
       ::Data_Wipe_Seed.reboot
-      render json: { message: ["All users and their data have been destroyed and rebuilt"] }
+      render json: { message: "All users and their data have been destroyed and rebuilt" }
     else
       render json: {}, status: 401
     end

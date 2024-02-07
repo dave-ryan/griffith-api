@@ -25,7 +25,7 @@ RSpec.describe "Sessions", type: :request do
       post "/sessions", params: { name: user.name, password: "wrong" }
       expect(response).to have_http_status(401)
       data = JSON.parse(response.body)
-      expect(data["errors"]).to eq "Wrong password"
+      expect(data["errors"]).to eq ["Wrong password"]
     end
   end
 
@@ -36,7 +36,7 @@ RSpec.describe "Sessions", type: :request do
       post "/sessions", params: { name: user.name }
       expect(response).to have_http_status(401)
       data = JSON.parse(response.body)
-      expect(data["errors"]).to eq "No Name or Password Provided"
+      expect(data["errors"]).to eq ["No Name or Password Provided"]
     end
   end
 
@@ -47,7 +47,7 @@ RSpec.describe "Sessions", type: :request do
       post "/sessions", params: { password: user.password }
       expect(response).to have_http_status(401)
       data = JSON.parse(response.body)
-      expect(data["errors"]).to eq "No Name or Password Provided"
+      expect(data["errors"]).to eq ["No Name or Password Provided"]
     end
   end
 end

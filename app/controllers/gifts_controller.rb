@@ -20,7 +20,7 @@ class GiftsController < ApplicationController
     gift = Gift.includes(:purchaser).find_by(id: params[:id])
 
     if !gift
-      render json: { errors: "Oops! This gift has been erased." }, status: 404
+      render json: { errors: ["Oops! This gift has been erased."] }, status: 404
     elsif params[:purchasing] == "purchasing"
       purchase_gift(gift)
     elsif params[:purchasing] == "unpurchasing"
@@ -75,7 +75,7 @@ class GiftsController < ApplicationController
       else
         # if i'm purchasing but someone already did, render error
         gift.purchaser && gift.purchaser != @current_user
-        render json: { errors: "Someone already purchased this gift!", purchaser: gift.purchaser, purchaser_id: gift.purchaser }, status: 400
+        render json: { errors: ["Someone already purchased this gift!"], purchaser: gift.purchaser, purchaser_id: gift.purchaser }, status: 400
       end
     else
       gift.purchaser = @current_user

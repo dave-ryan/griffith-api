@@ -1,7 +1,7 @@
 class SessionsController < ApplicationController
   def create
     if !params[:name] || !params[:password]
-      render json: { errors: "No Name or Password Provided" }, status: :unauthorized
+      render json: { errors: ["No Name or Password Provided"] }, status: :unauthorized
     else
       user = User.where("LOWER(name) LIKE ?", params[:name].delete(" ").downcase).first
       if params[:password][-1] == " "
@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
         password = params[:password]
       end
       if !user
-        render json: { errors: "Wrong username" }, status: :unauthorized
+        render json: { errors: ["Wrong username"] }, status: :unauthorized
       elsif user && user.authenticate(password.downcase)
         jwt = JWT.encode(
           {
@@ -22,7 +22,7 @@ class SessionsController < ApplicationController
         )
         render json: { jwt: jwt, user: ActiveModelSerializers::SerializableResource.new(user, serializer: UserSerializer) }, status: :created
       else
-        render json: { errors: "Wrong password" }, status: :unauthorized
+        render json: { errors: ["Wrong password"] }, status: :unauthorized
       end
     end
   end

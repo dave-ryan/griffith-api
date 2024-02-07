@@ -67,7 +67,7 @@ RSpec.describe "Gifts", type: :request do
       request_with_login("patch", "/gifts/1", user2, params)
       expect(response).to have_http_status(400)
       data = JSON.parse(response.body)
-      expect(data["errors"]).to eq "Someone already purchased this gift!"
+      expect(data["errors"]).to eq ["Someone already purchased this gift!"]
     end
   end
 

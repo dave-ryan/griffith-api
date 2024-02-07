@@ -5,7 +5,7 @@ RSpec.describe "Admin", type: :request do
     it "reseeds all data" do
       put "/admin/reboot"
       expect(response).to have_http_status(200)
-      expect(JSON.parse(response.body)["message"]).to eq ["All users and their data have been destroyed and rebuilt"]
+      expect(JSON.parse(response.body)["message"]).to eq "All users and their data have been destroyed and rebuilt"
 
       user = FactoryBot.create(:user)
       request_with_login("get", "/users", user)
@@ -39,7 +39,7 @@ RSpec.describe "Admin", type: :request do
       admin = FactoryBot.create(:admin)
       request_with_login("put", "/admin/reboot", admin)
       expect(response).to have_http_status(200)
-      expect(JSON.parse(response.body)["message"]).to eq ["All users and their data have been destroyed and rebuilt"]
+      expect(JSON.parse(response.body)["message"]).to eq "All users and their data have been destroyed and rebuilt"
 
       user = FactoryBot.create(:user, family_id: 2)
       request_with_login("get", "/users", user)
