@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "Customgifts", type: :request do
   describe "DELETE /customgifts/1 without logging in" do
     it "returns 401" do
-      delete "/customgifts/1"
+      delete "/customgifts/1/test"
       expect(response).to have_http_status(401)
     end
   end
