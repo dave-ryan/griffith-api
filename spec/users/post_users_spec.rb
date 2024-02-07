@@ -12,6 +12,7 @@ RSpec.describe "Users", type: :request do
     it "returns 401" do
       FactoryBot.create(:family)
       user = FactoryBot.create(:user)
+
       request_with_login("post", "/users", user)
       expect(response).to have_http_status(401)
     end
@@ -22,6 +23,7 @@ RSpec.describe "Users", type: :request do
       FactoryBot.create(:family)
       user = FactoryBot.create(:user)
       params = { name: FFaker::Name.first_name, family_id: 1, santa_group: 1, secret_santa: 1, is_admin: false, password: "123" }
+
       request_with_login("post", "/users", user, params)
       expect(response).to have_http_status(401)
     end
@@ -31,8 +33,10 @@ RSpec.describe "Users", type: :request do
     it "returns 400" do
       FactoryBot.create(:family)
       admin = FactoryBot.create(:admin)
+
       request_with_login("post", "/users", admin)
       expect(response).to have_http_status(400)
+      expect(JSON.parse(response.body)["errors"].sort).to eq ["Password can't be blank", "Name can't be blank", "Family must exist"].sort
     end
   end
 
@@ -41,8 +45,10 @@ RSpec.describe "Users", type: :request do
       FactoryBot.create(:family)
       admin = FactoryBot.create(:admin)
       params = { family_id: 1, santa_group: 1, secret_santa: 1, is_admin: false, password: "123" }
+
       request_with_login("post", "/users", admin, params)
       expect(response).to have_http_status(400)
+      expect(JSON.parse(response.body)["errors"]).to eq ["Name can't be blank"]
     end
   end
 
@@ -51,8 +57,10 @@ RSpec.describe "Users", type: :request do
       FactoryBot.create(:family)
       admin = FactoryBot.create(:admin)
       params = { name: FFaker::Name.first_name, family_id: 1, password: "123" }
+
       request_with_login("post", "/users", admin, params)
       expect(response).to have_http_status(200)
+      expect(JSON.parse(response.body)["message"]).to eq "User created successfully!"
     end
   end
 
@@ -61,8 +69,10 @@ RSpec.describe "Users", type: :request do
       FactoryBot.create(:family)
       admin = FactoryBot.create(:admin)
       params = { name: FFaker::Name.first_name, family_id: 1, santa_group: 1, secret_santa: 1, is_admin: false, password: "123" }
+
       request_with_login("post", "/users", admin, params)
       expect(response).to have_http_status(200)
+      expect(JSON.parse(response.body)["message"]).to eq "User created successfully!"
     end
   end
 end

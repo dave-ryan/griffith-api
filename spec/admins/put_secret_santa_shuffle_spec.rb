@@ -37,6 +37,7 @@ RSpec.describe "Admins", type: :request do
       admin = FactoryBot.create(:admin)
       request_with_login("put", "/admin/secret-santa-shuffle", admin)
       expect(response).to have_http_status(406)
+      expect(JSON.parse(response.body)["errors"]).to eq ["Secret Santa Shuffling is not possible because one family has too many members"]
     end
   end
 
@@ -51,6 +52,7 @@ RSpec.describe "Admins", type: :request do
       admin = FactoryBot.create(:admin)
       request_with_login("put", "/admin/secret-santa-shuffle", admin)
       expect(response).to have_http_status(406)
+      expect(JSON.parse(response.body)["errors"]).to eq ["Secret Santa Shuffling is not possible because one family has too many members"]
     end
   end
 

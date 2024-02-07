@@ -12,6 +12,7 @@ RSpec.describe "Gifts", type: :request do
     it "returns 404" do
       FactoryBot.create(:family)
       user = FactoryBot.create(:user)
+
       request_with_login("delete", "/gifts/1", user)
       expect(response).to have_http_status(404)
     end
@@ -23,6 +24,7 @@ RSpec.describe "Gifts", type: :request do
       FactoryBot.create_list(:user, 10)
       FactoryBot.create_list(:gift, 10)
       user = FactoryBot.create(:user)
+
       request_with_login("delete", "/gifts/1", user)
       expect(response).to have_http_status(401)
     end
@@ -33,8 +35,10 @@ RSpec.describe "Gifts", type: :request do
       FactoryBot.create(:family)
       user = FactoryBot.create(:user)
       FactoryBot.create_list(:gift, 10)
+
       request_with_login("delete", "/gifts/1", user)
       expect(response).to have_http_status(200)
+      expect(JSON.parse(response.body)["message"]).to eq "Gift destroyed!"
     end
   end
 end

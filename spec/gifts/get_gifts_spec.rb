@@ -12,6 +12,7 @@ RSpec.describe "Gifts", type: :request do
     it "returns 401" do
       FactoryBot.create(:family)
       user = FactoryBot.create(:user)
+      
       get "/gifts"
       expect(response).to have_http_status(401)
     end
@@ -21,6 +22,7 @@ RSpec.describe "Gifts", type: :request do
     it "returns empty data" do
       FactoryBot.create(:family)
       user = FactoryBot.create(:user)
+      
       request_with_login("get", "/gifts", user)
       expect(response).to have_http_status(200)
       data = JSON.parse(response.body)
@@ -33,6 +35,7 @@ RSpec.describe "Gifts", type: :request do
       FactoryBot.create(:family)
       user = FactoryBot.create(:user)
       FactoryBot.create_list(:gift, 10)
+      
       request_with_login("get", "/gifts", user)
       expect(response).to have_http_status(200)
       data = JSON.parse(response.body)

@@ -38,7 +38,7 @@ class GiftsController < ApplicationController
       render json: {}, status: 401
     else
       gift.delete
-      render json: { message: "Wished gift destroyed!" }
+      render json: { message: "Gift destroyed!" }
     end
   end
 

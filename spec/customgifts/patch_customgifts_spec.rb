@@ -12,6 +12,7 @@ RSpec.describe "Customgifts", type: :request do
     it "returns 404" do
       FactoryBot.create(:family)
       user = FactoryBot.create(:user)
+      
       request_with_login("patch", "/customgifts/1", user)
       expect(response).to have_http_status(404)
     end
@@ -23,6 +24,7 @@ RSpec.describe "Customgifts", type: :request do
       user = FactoryBot.create(:user)
       FactoryBot.create(:customgift)
       params = { note: "Test" }
+      
       request_with_login("patch", "/customgifts/100", user, params)
       expect(response).to have_http_status(404)
     end
@@ -35,6 +37,7 @@ RSpec.describe "Customgifts", type: :request do
       user = FactoryBot.create(:user)
       FactoryBot.create(:customgift)
       params = { note: "Test" }
+      
       request_with_login("patch", "/customgifts/1", user, params)
       expect(response).to have_http_status(401)
     end
@@ -46,6 +49,7 @@ RSpec.describe "Customgifts", type: :request do
       user = FactoryBot.create(:user)
       FactoryBot.create(:customgift)
       params = { note: "Test" }
+      
       request_with_login("patch", "/customgifts/1", user, params)
       expect(response).to have_http_status(200)
       data = JSON.parse(response.body)

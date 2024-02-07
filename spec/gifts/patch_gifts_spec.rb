@@ -15,6 +15,7 @@ RSpec.describe "Gifts", type: :request do
 
       request_with_login("patch", "/gifts/1", user)
       expect(response).to have_http_status(404)
+      expect(JSON.parse(response.body)["errors"]).to eq ["Oops! This gift has been erased."]
     end
   end
 
