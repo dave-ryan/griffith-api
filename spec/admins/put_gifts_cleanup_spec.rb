@@ -41,7 +41,7 @@ RSpec.describe "Admin", type: :request do
       request_with_login("put", "/admin/gifts-cleanup", admin)
       expect(response).to have_http_status(200)
       data = JSON.parse(response.body)
-      expect(data["message"]).to eq "Cleanup Successful"
+      expect(data["message"]).to eq "Clean up Successful"
       expect(data["cleaned_up"].length).to eq 2
 
       request_with_login("get", "/gifts", admin)

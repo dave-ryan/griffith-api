@@ -12,7 +12,12 @@ class AdminController < ApplicationController
   end
 
   def gifts_cleanup
+    this_christmas = Date.new(Date.today.year, 12, 25)
     last_christmas = Date.new(Date.today.year - 1, 12, 25)
+    if Date.today > this_christmas
+      last_christmas = this_christmas
+    end
+
     gifts = Gift.joins(:purchaser)
     cleaned_up = []
     gifts.each do |gift|
