@@ -3,14 +3,15 @@ class UsersController < ApplicationController
   before_action :authenticate_user, only: [:show, :index]
 
   def index
-    users = User.all.includes(:gifts,
-                              :purchasers,
-                              :secret_santa,
-                              :family,
-                              :customgifts,
-                              :customgift_purchasers).order(:name)
+    users = User.includes(:gifts,
+                          :purchasers,
+                          :secret_santa,
+                          :family,
+                          :customgifts,
+                          :customgift_purchasers).all.order(:name)
     render json: users,
            include: [
+                      :secret_santa,
                       :gifts => { include: :purchaser },
                       :customgifts => { include: :customgift_purchaser },
                     ]

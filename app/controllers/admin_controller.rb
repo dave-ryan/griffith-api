@@ -31,7 +31,7 @@ class AdminController < ApplicationController
 
   def families_index
     families = Family.all
-    render json: families.map { |family| FamilyMinSerializer.new(family).as_json }
+    render json: families, each_serializer: FamilyMinSerializer
   end
 
   def secret_santa_shuffle
@@ -58,8 +58,8 @@ class AdminController < ApplicationController
     while timer > 0
       user1 = group.sample
       user2 = group.sample
-      if user1.family_id != user2.family_id && !assigned_santa[user1.name] && !assigned_santa.has_value?(user2.name)
-        assigned_santa[user1.name] = user2.name
+      if user1.family_id != user2.family_id && !assigned_santa[user1.id] && !assigned_santa.has_value?(user2.id)
+        assigned_santa[user1.id] = user2.id
         user2.secret_santa_id = user1.id
         user2.save
       end
