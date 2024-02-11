@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_21_044820) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_09_045505) do
   create_table "customgifts", force: :cascade do |t|
     t.integer "user_id"
     t.integer "customgift_purchaser_id"
@@ -39,10 +39,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_21_044820) do
     t.integer "family_id"
     t.integer "secret_santa_id"
     t.string "password_digest"
-    t.integer "santa_group"
     t.boolean "is_admin"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "santa_group"
+    t.datetime "birthday", precision: nil
   end
 
 end

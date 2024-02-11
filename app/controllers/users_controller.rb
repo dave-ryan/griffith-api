@@ -11,9 +11,6 @@ class UsersController < ApplicationController
                               :customgift_purchasers).order(:name)
     render json: users,
            include: [
-                      :secret_santa,
-                      :family,
-                      :santa_group,
                       :gifts => { include: :purchaser },
                       :customgifts => { include: :customgift_purchaser },
                     ]
@@ -30,12 +27,14 @@ class UsersController < ApplicationController
                               :password,
                               :santa_group,
                               :secret_santa_id,
-                              :password)
+                              :birthday)
     user = User.new(name: permitted[:name],
                     family_id: permitted[:family_id],
-                    password: permitted[:password],
+                    is_admin: permitted[:is_admin],
+                    santa_group: permitted[:santa_group],
                     secret_santa_id: permitted[:secret_santa_id],
-                    santa_group: permitted[:santa_group])
+                    birthday: permitted[:birthday],
+                    password: permitted[:password])
 
     if user.save
       render json: { message: "User created successfully!" }
@@ -52,9 +51,9 @@ class UsersController < ApplicationController
       permitted = params.permit(:name,
                                 :family_id,
                                 :is_admin,
-                                :password,
                                 :santa_group,
                                 :secret_santa_id,
+                                :birthday,
                                 :password)
       permitted.each do |param, value|
         if user[param] != value

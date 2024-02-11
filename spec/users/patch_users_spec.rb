@@ -12,6 +12,7 @@ RSpec.describe "Users", type: :request do
     it "returns 401" do
       FactoryBot.create(:family)
       user = FactoryBot.create(:user)
+
       request_with_login("patch", "/users/1", user)
       expect(response).to have_http_status(401)
     end
@@ -22,6 +23,7 @@ RSpec.describe "Users", type: :request do
       FactoryBot.create(:family)
       user = FactoryBot.create(:user)
       params = { id: 1, name: FFaker::Name.first_name, family_id: 1, santa_group: 1, secret_santa: 1, is_admin: false, password: "123" }
+
       request_with_login("patch", "/users/1", user, params)
       expect(response).to have_http_status(401)
     end
@@ -31,6 +33,7 @@ RSpec.describe "Users", type: :request do
     it "returns 200" do
       FactoryBot.create(:family)
       admin = FactoryBot.create(:admin)
+
       request_with_login("patch", "/users/1", admin)
       expect(response).to have_http_status(200)
     end
@@ -41,8 +44,26 @@ RSpec.describe "Users", type: :request do
       FactoryBot.create(:family)
       admin = FactoryBot.create(:admin)
       params = { id: 1, name: FFaker::Name.first_name, family_id: 1, santa_group: 1, secret_santa: 1, is_admin: false, password: "123" }
+
       request_with_login("patch", "/users/1", admin, params)
       expect(response).to have_http_status(200)
+    end
+  end
+
+  describe "PATCH /users/1 with admin, changing birthday" do
+    it "returns 200" do
+      FactoryBot.create(:family)
+      FactoryBot.create(:user)
+      admin = FactoryBot.create(:admin)
+      params = { birthday: Date.today }
+
+      request_with_login("patch", "/users/1", admin, params)
+      expect(response).to have_http_status(200)
+      expect(JSON.parse(response.body)["message"]).to eq "User updated successfully!"
+
+      request_with_login("get", "/users", admin)
+      expect(response).to have_http_status(200)
+      puts response.body
     end
   end
 end
