@@ -30,16 +30,8 @@ class AdminController < ApplicationController
   end
 
   def families_index
-    families = Family.all.includes(:users,
-                                   :gifts,
-                                   :purchasers,
-                                   :secret_santas,
-                                   :customgifts,
-                                   :customgift_purchasers)
-    render json: families,
-           include: [:users => { :include => :secret_santa,
-                                 :customgifts => { :include => :purchaser },
-                                 :gifts => { :include => :purchaser } }]
+    families = Family.all
+    render json: families.map { |family| FamilyMinSerializer.new(family).as_json }
   end
 
   def secret_santa_shuffle
