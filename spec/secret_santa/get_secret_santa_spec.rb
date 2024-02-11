@@ -11,7 +11,7 @@ RSpec.describe "Secret Santa", type: :request do
   describe "GET /secret-santa without logging in" do
     it "returns 401" do
       FactoryBot.create(:family)
-      user = FactoryBot.create(:user)
+      FactoryBot.create(:user)
       get "/secret-santa"
       expect(response).to have_http_status(401)
     end
@@ -47,7 +47,7 @@ RSpec.describe "Secret Santa", type: :request do
       request_with_login("get", "/secret-santa", user)
       expect(response).to have_http_status(200)
       data = JSON.parse(response.body)
-      expect(data.length).to eq 8
+      expect(data.length).to eq 9
       expect(data["santa_group"]).to eq 1
       expect(data["secret_santa_id"]).to eq 2
       expect(data["is_admin"]).to eq false

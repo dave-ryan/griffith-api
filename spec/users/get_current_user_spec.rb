@@ -24,7 +24,7 @@ RSpec.describe "Users", type: :request do
       request_with_login("get", "/current-user", user)
       expect(response).to have_http_status(200)
       data = JSON.parse(response.body)
-      expect(data.length).to eq 6
+      expect(data.length).to eq 7
       expect(data["family_id"]).to eq 1
       expect(data["santa_group"]).to eq 1
       expect(data["secret_santa_id"]).to eq 2

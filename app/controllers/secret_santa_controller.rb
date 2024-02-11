@@ -12,8 +12,6 @@ class SecretSantaController < ApplicationController
                                       :customgift_purchasers).find_by(id: secret_santa.id)
       render json: my_secret_santa,
              include: [
-               :secret_santa,
-               :santa_group,
                :gifts => { include: :purchaser },
                :customgifts => { include: :customgift_purchaser },
              ]

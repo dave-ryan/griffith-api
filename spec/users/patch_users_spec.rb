@@ -63,7 +63,6 @@ RSpec.describe "Users", type: :request do
 
       request_with_login("get", "/users", admin)
       expect(response).to have_http_status(200)
-      puts response.body
     end
   end
 end
