@@ -26,6 +26,13 @@ class AdminController < ApplicationController
         gift.delete
       end
     end
+    gifts = Customgift.joins(:customgift_purchaser)
+    gifts.each do |gift|
+      if gift.created_at < last_christmas && gift.updated_at < last_christmas
+        cleaned_up.push(gift)
+        gift.delete
+      end
+    end
     render json: { message: "Clean up Successful", cleaned_up: cleaned_up }
   end
 
