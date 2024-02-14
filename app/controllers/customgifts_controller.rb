@@ -22,6 +22,7 @@ class CustomgiftsController < ApplicationController
       render json: {}, status: 401
     else
       customgift.note = params[:note]
+      customgift.purchased_at = customgift.purchased_at || DateTime.now
       if customgift.save
         render json: customgift
       else

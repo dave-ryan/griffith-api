@@ -78,6 +78,7 @@ class GiftsController < ApplicationController
         render json: { errors: ["Someone already purchased this gift!"], purchaser: gift.purchaser, purchaser_id: gift.purchaser }, status: 400
       end
     else
+      gift.purchased_at = DateTime.now
       gift.purchaser = @current_user
       save_gift(gift)
     end
