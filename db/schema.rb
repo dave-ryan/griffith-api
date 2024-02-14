@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_02_09_045505) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_14_010323) do
   create_table "customgifts", force: :cascade do |t|
     t.integer "user_id"
     t.integer "customgift_purchaser_id"
     t.text "note"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "purchased_at", precision: nil
   end
 
   create_table "families", force: :cascade do |t|
@@ -32,6 +33,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_09_045505) do
     t.string "link"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "purchased_at", precision: nil
   end
 
   create_table "users", force: :cascade do |t|
