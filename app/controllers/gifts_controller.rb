@@ -21,9 +21,9 @@ class GiftsController < ApplicationController
 
     if !gift
       render json: { errors: ["Oops! This gift has been erased."] }, status: 404
-    elsif params[:purchasing] == "purchasing"
+    elsif params[:gift_action] == "purchasing"
       purchase_gift(gift)
-    elsif params[:purchasing] == "unpurchasing"
+    elsif params[:gift_action] == "unpurchasing"
       unpurchase_gift(gift)
     else
       update_gift(gift, params)

@@ -24,7 +24,7 @@ RSpec.describe "Gifts", type: :request do
       FactoryBot.create(:family)
       user = FactoryBot.create(:user)
       FactoryBot.create(:gift)
-      params = { purchasing: "purchasing" }
+      params = { gift_action: "purchasing" }
 
       request_with_login("patch", "/gifts/1", user, params)
       expect(response).to have_http_status(200)
@@ -38,7 +38,7 @@ RSpec.describe "Gifts", type: :request do
       FactoryBot.create(:family)
       user = FactoryBot.create(:user)
       FactoryBot.create(:gift)
-      params = { purchasing: "purchasing" }
+      params = { gift_action: "purchasing" }
 
       request_with_login("patch", "/gifts/1", user, params)
       expect(response).to have_http_status(200)
@@ -57,7 +57,7 @@ RSpec.describe "Gifts", type: :request do
       FactoryBot.create(:family)
       user = FactoryBot.create(:user)
       FactoryBot.create(:gift)
-      params = { purchasing: "purchasing" }
+      params = { gift_action: "purchasing" }
 
       request_with_login("patch", "/gifts/1", user, params)
       expect(response).to have_http_status(200)
@@ -77,13 +77,13 @@ RSpec.describe "Gifts", type: :request do
       FactoryBot.create(:family)
       user = FactoryBot.create(:user)
       FactoryBot.create(:gift)
-      params = { purchasing: "purchasing" }
+      params = { gift_action: "purchasing" }
 
       request_with_login("patch", "/gifts/1", user, params)
       data = JSON.parse(response.body)
       expect(data["purchaser_id"]).to eq user.id
 
-      params2 = { purchasing: "unpurchasing" }
+      params2 = { gift_action: "unpurchasing" }
 
       request_with_login("patch", "/gifts/1", user, params2)
       expect(response).to have_http_status(200)
@@ -97,7 +97,7 @@ RSpec.describe "Gifts", type: :request do
       FactoryBot.create(:family)
       user = FactoryBot.create(:user)
       FactoryBot.create(:gift)
-      params = { purchasing: "unpurchasing" }
+      params = { gift_action: "unpurchasing" }
 
       request_with_login("patch", "/gifts/1", user, params)
       expect(response).to have_http_status(200)
@@ -111,14 +111,14 @@ RSpec.describe "Gifts", type: :request do
       FactoryBot.create(:family)
       user = FactoryBot.create(:user)
       FactoryBot.create(:gift)
-      params = { purchasing: "purchasing" }
+      params = { gift_action: "purchasing" }
 
       request_with_login("patch", "/gifts/1", user, params)
       data = JSON.parse(response.body)
       expect(data["purchaser_id"]).to eq user.id
 
       user2 = FactoryBot.create(:user)
-      params2 = { purchasing: "unpurchasing" }
+      params2 = { gift_action: "unpurchasing" }
 
       request_with_login("patch", "/gifts/1", user2, params2)
       expect(response).to have_http_status(200)
