@@ -6,6 +6,7 @@ class CustomgiftsController < ApplicationController
       user_id: params[:user_id],
       customgift_purchaser_id: @current_user.id,
       note: params[:note],
+      purchased_at: DateTime.now,
     )
     if customgift.save
       render json: customgift
@@ -21,8 +22,7 @@ class CustomgiftsController < ApplicationController
     elsif customgift.customgift_purchaser_id != @current_user.id
       render json: {}, status: 401
     else
-      customgift.note = params[:note]
-      customgift.purchased_at = customgift.purchased_at || DateTime.now
+      customgift[:note] = params[:note]
       if customgift.save
         render json: customgift
       else
