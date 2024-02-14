@@ -62,7 +62,8 @@ class GiftsController < ApplicationController
     elsif gift.purchaser && gift.purchaser != @current_user
       render json: gift
     elsif gift.purchaser && gift.purchaser == @current_user
-      gift.purchaser = nil
+      gift[:purchaser_id] = nil
+      gift[:purchased_at] = nil
       save_gift(gift)
     end
   end
@@ -78,8 +79,8 @@ class GiftsController < ApplicationController
         render json: { errors: ["Someone already purchased this gift!"], purchaser: gift.purchaser, purchaser_id: gift.purchaser }, status: 400
       end
     else
-      gift.purchased_at = DateTime.now
-      gift.purchaser = @current_user
+      gift[:purchased_at] = DateTime.now
+      gift[:purchaser_id] = @current_user.id
       save_gift(gift)
     end
   end
