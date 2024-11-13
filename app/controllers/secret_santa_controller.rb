@@ -6,14 +6,11 @@ class SecretSantaController < ApplicationController
     if secret_santa
       my_secret_santa = User.includes(:gifts,
                                       :purchasers,
-                                      :secret_santa,
-                                      :family,
                                       :customgifts,
                                       :customgift_purchasers).find_by(id: secret_santa.id)
       render json: my_secret_santa,
              include: [
-               :gifts => { include: :purchaser },
-               :customgifts => { include: :customgift_purchaser },
+               "gifts", "gifts.purchaser", "customgifts", "customgifts.customgift_purchaser",
              ]
     elsif !@current_user.santa_group
       render json: {}

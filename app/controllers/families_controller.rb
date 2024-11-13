@@ -7,15 +7,17 @@ class FamiliesController < ApplicationController
       render_404
     else
       my_family = Family.includes(:users,
+                                  :secret_santas,
                                   :gifts,
                                   :purchasers,
-                                  :secret_santas,
                                   :customgifts,
                                   :customgift_purchasers).find_by(id: @current_user.family.id)
-      render json: my_family,
-             include: [:users => { include: :secret_santa,
-                                   :customgifts => { include: :purchaser },
-                                   :gifts => { include: :purchaser } }]
+      render json: my_family, include: ["users",
+                                        "users.secret_santa",
+                                        "users.gifts",
+                                        "users.gifts.purchaser",
+                                        "users.customgifts",
+                                        "users.customgifts.customgift_purchaser"]
     end
   end
 
