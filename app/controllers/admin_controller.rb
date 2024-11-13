@@ -14,21 +14,29 @@ class AdminController < ApplicationController
   def gifts_cleanup
     this_christmas = Date.new(Date.today.year, 12, 25)
     last_christmas = Date.new(Date.today.year - 1, 12, 25)
+    two_months_ago = Date.new(Date.today.year, Date.today.month - 1, Date.today.day)
+
+    p this_christmas
+    p last_christmas
+    p two_months_ago
+
     if Date.today > this_christmas
       last_christmas = this_christmas
     end
 
     gifts = Gift.joins(:purchaser)
     cleaned_up = []
+    customgifts = Customgift.joins(:customgift_purchaser)
     gifts.each do |gift|
-      if gift.created_at < last_christmas && gift.updated_at < last_christmas
+      if gift.created_at < two_months_ago
+        # if gift.created_at < last_christmas && gift.updated_at < last_christmas
         cleaned_up.push(gift)
         gift.delete
       end
     end
-    gifts = Customgift.joins(:customgift_purchaser)
-    gifts.each do |gift|
-      if gift.created_at < last_christmas && gift.updated_at < last_christmas
+    customgifts.each do |gift|
+      if gift.created_at < two_months_ago
+        # if gift.created_at < last_christmas && gift.updated_at < last_christmas
         cleaned_up.push(gift)
         gift.delete
       end
