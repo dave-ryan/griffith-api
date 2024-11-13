@@ -24,9 +24,9 @@ class AdminController < ApplicationController
       last_christmas = this_christmas
     end
 
-    gifts = Gift.joins(:purchaser)
+    gifts = Gift.all
     cleaned_up = []
-    customgifts = Customgift.joins(:customgift_purchaser)
+    customgifts = Customgift.all
     gifts.each do |gift|
       if gift.created_at < two_months_ago
         # if gift.created_at < last_christmas && gift.updated_at < last_christmas
