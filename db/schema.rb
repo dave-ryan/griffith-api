@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_02_14_010323) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_17_181746) do
   create_table "customgifts", force: :cascade do |t|
     t.integer "user_id"
     t.integer "customgift_purchaser_id"
@@ -22,6 +22,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_14_010323) do
 
   create_table "families", force: :cascade do |t|
     t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "friendships", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "friend_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
