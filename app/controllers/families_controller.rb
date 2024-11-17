@@ -6,12 +6,12 @@ class FamiliesController < ApplicationController
     if !@current_user.family
       render_404
     else
-      my_family = Family.includes(:users,
-                                  :secret_santas,
-                                  :gifts,
-                                  :purchasers,
-                                  :customgifts,
-                                  :customgift_purchasers).find_by(id: @current_user.family.id)
+      my_family = Familyd.includes(:users,
+                                   :secret_santas,
+                                   :gifts,
+                                   :purchasers,
+                                   :customgifts,
+                                   :customgift_purchasers).find_by(id: @current_user.family.id)
       render json: my_family, include: ["users",
                                         "users.secret_santa",
                                         "users.gifts",
