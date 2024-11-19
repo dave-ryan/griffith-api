@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_action :authenticate_admin, except: [:show, :index]
-  before_action :authenticate_user, only: [:show, :index]
+  before_action :authenticate_admin, except: [:show, :index, :generate_share_code, :share]
+  before_action :authenticate_user, only: [:show, :index, :generate_share_code]
 
   def index
     users = User.includes(:secret_santa,
@@ -23,6 +23,27 @@ class UsersController < ApplicationController
     render json: current_user, serializer: UserMinSerializer
   end
 
+  def share
+    user = User.includes(:secret_santa,
+                          :gifts,
+                          :purchasers,
+                          :family,
+                          :customgifts,
+                          :customgift_purchasers).find_by(id: params[:id])
+    if user && params[:share_code] == user.share_code
+      render json: user,
+      include: [
+                 "secret_santa",
+                 "gifts",
+                 "gifts.purchaser",
+                 "customgifts",
+                 "customgifts.customgift_purchaser",
+               ]
+    else
+      render json: { message: "Wrong Code or User!" }, status: 401
+    end
+  end
+
   def create
     permitted = params.permit(:name,
                               :family_id,
@@ -37,7 +58,8 @@ class UsersController < ApplicationController
                     santa_group: permitted[:santa_group],
                     secret_santa_id: permitted[:secret_santa_id],
                     birthday: permitted[:birthday],
-                    password: permitted[:password])
+                    password: permitted[:password],
+                    share_code: SecureRandom.hex(5))
 
     if user.save
       render json: { message: "User created successfully!" }
@@ -80,5 +102,14 @@ class UsersController < ApplicationController
     user = User.find_by(id: params[:id])
     user.delete
     render json: { message: "User has been deleted!" }
+  end
+
+  def generate_share_code
+    current_user.share_code = SecureRandom.hex(5)
+    if current_user.save
+      render json: current_user
+    else
+      render json: { errors: current_user.errors.full_messages }
+    end
   end
 end
