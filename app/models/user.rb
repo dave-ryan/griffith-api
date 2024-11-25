@@ -2,7 +2,7 @@ class User < ApplicationRecord
   has_secure_password
   validates :name, presence: true
 
-  belongs_to :family
+  belongs_to :family, optional: true
   belongs_to :secret_santa, class_name: "User", foreign_key: "secret_santa_id", optional: true
 
   has_many :gifts

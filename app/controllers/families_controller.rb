@@ -4,7 +4,7 @@ class FamiliesController < ApplicationController
 
   def index
     if !@current_user.family
-      render_404
+      render json: {}, status: 200
     else
       my_family = Family.includes(:users,
                                   :secret_santas,

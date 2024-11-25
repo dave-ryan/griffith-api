@@ -1,22 +1,28 @@
 class UsersController < ApplicationController
-  before_action :authenticate_admin, except: [:show, :index, :generate_share_code, :share]
-  before_action :authenticate_user, only: [:show, :index, :generate_share_code]
+  before_action :authenticate_admin, except: [:show, :index, :generate_share_code, :friends, :create, :share]
+  before_action :authenticate_user, only: [:show, :index, :generate_share_code, :friends]
 
   def index
-    users = User.includes(:secret_santa,
-                          :gifts,
-                          :purchasers,
-                          :family,
-                          :customgifts,
-                          :customgift_purchasers).all.order(:name)
-    render json: users,
-           include: [
-                      "secret_santa",
-                      "gifts",
-                      "gifts.purchaser",
-                      "customgifts",
-                      "customgifts.customgift_purchaser",
-                    ]
+    friends = current_user.friends
+
+    if current_user.family
+      users = User.includes(:secret_santa,
+                            :gifts,
+                            :purchasers,
+                            :family,
+                            :customgifts,
+                            :customgift_purchasers).where.not(family_id: nil).order(:name)
+      render json: users + friends,
+            include: [
+                        "secret_santa",
+                        "gifts",
+                        "gifts.purchaser",
+                        "customgifts",
+                        "customgifts.customgift_purchaser",
+                      ]
+    else
+      render json: friends, status: 200
+    end
   end
 
   def show
@@ -45,26 +51,30 @@ class UsersController < ApplicationController
   end
 
   def create
-    permitted = params.permit(:name,
-                              :family_id,
-                              :is_admin,
-                              :password,
-                              :santa_group,
-                              :secret_santa_id,
-                              :birthday)
-    user = User.new(name: permitted[:name],
-                    family_id: permitted[:family_id],
-                    is_admin: permitted[:is_admin],
-                    santa_group: permitted[:santa_group],
-                    secret_santa_id: permitted[:secret_santa_id],
-                    birthday: permitted[:birthday],
-                    password: permitted[:password],
-                    share_code: SecureRandom.hex(5))
-
-    if user.save
-      render json: { message: "User created successfully!" }
+    duplicate_user = User.where("lower(name) = ?", params[:name].downcase).first
+    if duplicate_user
+      render json: {errors: ["User with that name already exists"]}, status: 409
     else
-      render json: { errors: user.errors.full_messages }, status: 400
+      permitted = params.permit(:name,
+                                :family_id,
+                                :is_admin,
+                                :password,
+                                :santa_group,
+                                :secret_santa_id,
+                                :birthday)
+      user = User.new(name: permitted[:name],
+                      family_id: permitted[:family_id] || nil,
+                      is_admin: permitted[:is_admin] || nil,
+                      santa_group: permitted[:santa_group] || nil,
+                      secret_santa_id: permitted[:secret_santa_id] || nil,
+                      birthday: permitted[:birthday] || nil,
+                      password: permitted[:password],
+                      share_code: SecureRandom.hex(5))
+      if user.save!
+        render json: { message: "User created successfully!" }
+      else
+        render json: { errors: user.errors.full_messages }, status: 400
+      end
     end
   end
 
