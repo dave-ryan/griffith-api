@@ -26,7 +26,7 @@ class UsersController < ApplicationController
   end
 
   def show
-    render json: current_user, serializer: UserMinSerializer
+    render json: current_user
   end
 
   def share

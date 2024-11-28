@@ -6,4 +6,5 @@ class UserSerializer < ActiveModel::Serializer
 
   has_many :gifts
   has_many :customgifts
+  has_many :friends, through: :friendships, foreign_key: "user_Id"
 end
