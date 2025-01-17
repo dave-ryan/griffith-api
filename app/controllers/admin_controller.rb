@@ -14,34 +14,36 @@ class AdminController < ApplicationController
   def gifts_cleanup
     this_christmas = Date.new(Date.today.year, 12, 25)
     last_christmas = Date.new(Date.today.year - 1, 12, 25)
-    two_months_ago = Date.new(Date.today.year, Date.today.month - 1, Date.today.day)
-
-    p this_christmas
-    p last_christmas
-    p two_months_ago
-
     if Date.today > this_christmas
       last_christmas = this_christmas
     end
 
-    gifts = Gift.all
-    cleaned_up = []
+    gifts = Gift.where.not(purchaser: nil)
     customgifts = Customgift.all
+    cleaned_up = []
+
     gifts.each do |gift|
-      if gift.created_at < two_months_ago
-        # if gift.created_at < last_christmas && gift.updated_at < last_christmas
+      # gift was purchased before last christmas or purchased before BD & BD has passed
+      if gift.user.birthday
+        users_birthdate = Date.new(Date.today.year, gift.user.birthday.month, gift.user.birthday.day)
+      end
+      if gift.purchased_at < last_christmas || gift.purchased_at = nil || (users_birthdate != nil && gift.purchased_at < users_birthdate && user_birthday < Date.today)
         cleaned_up.push(gift)
         gift.delete
       end
     end
     customgifts.each do |gift|
-      if gift.created_at < two_months_ago
-        # if gift.created_at < last_christmas && gift.updated_at < last_christmas
+      # gift was purchased before last christmas or purchased before BD & BD has passed
+      if gift.user.birthday
+        users_birthdate = Date.new(Date.today.year, gift.user.birthday.month, gift.user.birthday.day)
+      end
+      if gift.purchased_at < last_christmas || gift.purchased_at = nil || (users_birthdate != nil && gift.purchased_at < users_birthdate && user_birthday < Date.today)
         cleaned_up.push(gift)
         gift.delete
       end
     end
-    render json: { message: "Clean up Successful", cleaned_up: cleaned_up }
+
+    render json: { message: "Clean up Successful", cleaned_up: cleaned_up }, status: 200
   end
 
   def families_index
