@@ -27,7 +27,7 @@ class AdminController < ApplicationController
       if gift.user.birthday
         users_birthdate = Date.new(Date.today.year, gift.user.birthday.month, gift.user.birthday.day)
       end
-      if gift.purchased_at < last_christmas || gift.purchased_at = nil || (users_birthdate != nil && gift.purchased_at < users_birthdate && user_birthday < Date.today)
+      if gift.purchased_at < last_christmas || gift.purchased_at = nil || (users_birthdate != nil && gift.purchased_at < users_birthdate && users_birthdate < Date.today)
         cleaned_up.push(gift)
         gift.delete
       end
@@ -37,7 +37,7 @@ class AdminController < ApplicationController
       if gift.user.birthday
         users_birthdate = Date.new(Date.today.year, gift.user.birthday.month, gift.user.birthday.day)
       end
-      if gift.purchased_at < last_christmas || gift.purchased_at = nil || (users_birthdate != nil && gift.purchased_at < users_birthdate && user_birthday < Date.today)
+      if gift.purchased_at < last_christmas || gift.purchased_at = nil || (users_birthdate != nil && gift.purchased_at < users_birthdate && users_birthdate < Date.today)
         cleaned_up.push(gift)
         gift.delete
       end
